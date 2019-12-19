@@ -19,5 +19,7 @@ hibernateDilact=org.hibernate.dialect.MySQL5Dialect
 
 get the source code from 
 
+git clone git@github.com:ashokkumarjagarwal/java_assignment.git
+
 
 
