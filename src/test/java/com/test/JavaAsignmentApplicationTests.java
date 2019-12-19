@@ -1,9 +1,25 @@
 package com.test;
 
+import com.test.entity.Role;
+import com.test.entity.User;
+import com.test.repositoryImpl.RoleRepositoryImpl;
+import com.test.repositoryImpl.UserRepositoryImpl;
+import com.test.responseDTO.UserRegisterDto;
+import com.test.serviveImpl.UserService;
+import com.test.util.FileUtil;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Description;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -18,6 +34,10 @@ public class JavaAsignmentApplicationTests {
 	@Autowired
 	private UserService userService;
 
+	@MockBean
+	private FileUtil fileUtil;
+
+	@Description("Create all user successfully")
 	@Test
 	public void createUserSuccess() {
 		Mockito.when(roleRepository.findAll()).thenReturn(getRoleList());
@@ -26,8 +46,7 @@ public class JavaAsignmentApplicationTests {
 		Mockito.doNothing().when(userRepository).saveEntityList(new ArrayList<User>());
 		String data = "Name,Email,Role,\nA,A@gmail.com,SA#ADMIN\nB,B@gmail.com,ADMIN,\nC,C@gmail.com,USER";
 		MockMultipartFile multipartFile = new MockMultipartFile("xyz.csv","xyz.csv","text/csv",data.getBytes());
-		UserService u = Mockito.mock(UserService.class);
-		Mockito.doNothing().when(u).writeErrorFIle(new ArrayList<>(),"");
+		Mockito.doNothing().when(fileUtil).writeErrorFIle(new ArrayList<>(),"");
 
 		UserRegisterDto userRegisterDto =userService.register(multipartFile);
 
@@ -37,6 +56,7 @@ public class JavaAsignmentApplicationTests {
 		Assert.assertEquals(true,userRegisterDto.getErrorFileUrl()!=null);
 	}
 
+	@Description("Create some user successfully and some failure")
 	@Test
 	public void createUserWithFailureRow() {
 		Mockito.when(roleRepository.findAll()).thenReturn(getRoleList());
@@ -45,8 +65,7 @@ public class JavaAsignmentApplicationTests {
 		Mockito.doNothing().when(userRepository).saveEntityList(new ArrayList<User>());
 		String data = "Name,Email,Role,\nA,A@gmail.com,SA#ADMIN\nD,Dgmail.com,ADMIN,\nE,E@gmail.com,USER#SU\nF,F@gmail.com,USER";
 		MockMultipartFile multipartFile = new MockMultipartFile("xyz.csv","xyz.csv","text/csv",data.getBytes());
-		UserService u = Mockito.mock(UserService.class);
-		Mockito.doNothing().when(u).writeErrorFIle(new ArrayList<>(),"");
+		Mockito.doNothing().when(fileUtil).writeErrorFIle(new ArrayList<>(),"");
 
 		UserRegisterDto userRegisterDto =userService.register(multipartFile);
 

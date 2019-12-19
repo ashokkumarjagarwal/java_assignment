@@ -7,6 +7,7 @@ import com.test.exception.ValidationException;
 import com.test.repositoryImpl.UserRepositoryImpl;
 import com.test.responseDTO.UserRegisterDto;
 import com.test.util.CommonUtil;
+import com.test.util.FileUtil;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
@@ -34,6 +35,9 @@ public class UserService {
 
     @Autowired
     private CommonUtil commonUtil;
+
+    @Autowired
+    private FileUtil fileUtil;
 
 
     public UserRegisterDto register(MultipartFile file){
@@ -111,7 +115,7 @@ public class UserService {
                 userRepository.saveEntityList(createUserList);
             }
             if (errors.size()>0){
-                writeErrorFIle(errors,fileUrl);
+                fileUtil.writeErrorFIle(errors,fileUrl);
             }
             response.setNoOfrowParsed(rowParsed[0]);
             response.setErrorFileUrl(fileUrl);
@@ -121,19 +125,6 @@ public class UserService {
             e.printStackTrace();
         }
         return response;
-    }
-
-    public void writeErrorFIle(List<String[]> errors,String fileUrl){
-        try{
-            try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(System.getProperty("user.dir")+"/../"+fileUrl)); CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader("Name", "Email", "Role", "Errors"));) {
-                for (String arr[]:errors){
-                    csvPrinter.printRecord(arr);
-                }
-                csvPrinter.flush();
-            }
-        }catch (IOException e){
-            System.out.println(e);
-        }
     }
 
     public void download(String fileUrl,HttpServletResponse response) throws ValidationException {
