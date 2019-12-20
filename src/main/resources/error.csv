@@ -1,0 +1,7 @@
+Name,Email,Role,Errors
+A,A@gmail.com,SU#ADMIN,Invalid Role SU
+B,Bgmail.com,ADMIN#AA,Invalid Email#Invalid Role AA
+D,D@gmail.com,ADMIN#ENDUSER#LL,Invalid Role ENDUSER#Invalid Role LL
+F,E@gmail.com,ADMIN,Email Already Registered
+"",K@Gmail.com,,"User Name Required#User Role Required#Invalid Role "
+N,,,"Invalid Email#User Role Required#Invalid Role "
